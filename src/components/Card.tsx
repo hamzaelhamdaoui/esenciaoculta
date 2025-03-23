@@ -21,53 +21,65 @@ const Card: React.FC<CardProps> = ({ name, image, url, id, orderId, description 
 
   return (
     <>
-      <div className="border rounded-lg shadow-md bg-white p-4 flex flex-col items-center text-center relative">
-        <img src={image} alt={name} className="w-full h-40 object-cover rounded mb-2" />
-        <h2 className="font-semibold text-base mb-1">{name}</h2>
+      <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-transform hover:scale-105">
+        {/* Imagen del perfume */}
+        <div className="relative">
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-48 object-cover"
+          />
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute top-2 right-2 text-white bg-black bg-opacity-40 hover:bg-opacity-70 p-1 rounded-full transition"
+            title="Ver producto en la tienda"
+          >
+            <ExternalLink size={16} />
+          </a>
+        </div>
 
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="absolute top-2 right-2 text-gray-400 hover:text-blue-600"
-          title="Ver producto en la web"
-        >
-          <ExternalLink size={18} />
-        </a>
-
-        <button
-          onClick={() => setShowConfirm(true)}
-          className="mt-3 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded text-sm"
-        >
-          Este es el perfume
-        </button>
+        {/* Contenido textual */}
+        <div className="p-4 text-center">
+          <h2 className="text-lg font-semibold text-gray-900">{name}</h2>
+          <p className="text-sm text-gray-600 mt-1 line-clamp-2">{description}</p>
+          <button
+            onClick={() => setShowConfirm(true)}
+            className="mt-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white text-sm font-semibold py-2 px-4 rounded-full shadow-md hover:from-yellow-500 hover:to-yellow-600 hover:scale-105 transition-all duration-300"
+          >
+            Este es el perfume
+          </button>
+        </div>
       </div>
 
+      {/* Popup de confirmación */}
       {showConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md text-center relative">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white p-6 rounded-xl shadow-xl max-w-md w-full text-center relative">
             <button
-              className="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-xl"
+              className="absolute top-2 right-3 text-gray-400 hover:text-red-500 text-2xl"
               onClick={() => setShowConfirm(false)}
             >
               &times;
             </button>
-            <img src={image} alt={name} className="w-40 h-40 object-cover mx-auto rounded mb-4" />
-            <h2 className="text-xl font-semibold mb-2">{name}</h2>
-            <h4 className="text-m font-regular mb-2">{description}</h4>
-            <p className="text-sm text-gray-700 mb-4">
-              <strong>Solo tienes un intento.</strong> ¿Estás seguro de que este es el perfume?
+            <img src={image} alt={name} className="w-32 h-32 object-cover mx-auto rounded mb-4 shadow" />
+            <h2 className="text-xl font-bold text-gray-800">{name}</h2>
+            <p className="text-sm text-gray-600 mt-2">{description}</p>
+            <p className="text-sm text-gray-700 mt-4">
+              <strong>⚠️ Solo tienes un intento.</strong><br />¿Estás seguro de que esta es la fragancia?
             </p>
-            <div className="flex justify-center gap-4">
+
+            <div className="flex justify-center gap-4 mt-6">
               <button
                 onClick={handleConfirm}
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+                className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-full font-semibold"
               >
                 Confirmar
               </button>
               <button
                 onClick={() => setShowConfirm(false)}
-                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black rounded"
+                className="px-5 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-full"
               >
                 Cancelar
               </button>

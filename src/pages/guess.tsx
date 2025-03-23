@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { getAllPerfumes, getPerfume } from "../api/api";
 import Card from "../components/Card";
+import ElixartLoader from "@/components/Loader";
 
 interface Perfume {
   id: string;
@@ -14,6 +15,7 @@ interface Perfume {
 const Guess: React.FC = () => {
   const router = useRouter();
   const { order_id } = router.query;
+
   const [perfumes, setPerfumes] = useState<Perfume[]>([]);
   const [pedidoYaUsado, setPedidoYaUsado] = useState(false);
   const [correcto, setCorrecto] = useState(false);
@@ -50,49 +52,79 @@ const Guess: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-2xl font-bold mb-4">Selecciona el perfume</h1>
+    <div className="min-h-screen bg-white flex flex-col justify-between items-center px-4 py-8">
+      {/* Header */}
+      <header className="w-full flex items-center justify-between mb-6 max-w-4xl">
+        <a href="/" className="flex items-center">
+          <img src="/logo.png" alt="Elixart Parfums" className="w-28" />
+        </a>
+        <nav>
+          <ul className="flex gap-6 text-sm font-medium text-gray-700">
+            <li>
+              <a href="https://elixartparfums.com" target="_blank" className="hover:text-yellow-500 transition">Tienda</a>
+            </li>
+            <li>
+              <a href="https://elixartparfums.com/pages/contact" target="_blank" className="hover:text-yellow-500 transition">Contáctanos</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-      {loading ? (
-        <p className="text-gray-700 text-lg">Cargando perfumes...</p>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {perfumes.map((perfume) => (
-            <Card
-              key={perfume.id}
-              id={perfume.id}
-              name={perfume.title}
-              image={perfume.image}
-              url={perfume.url}
-              orderId={order_id as string}
-              description={perfume.description}
-            />
-          ))}
-        </div>
-      )}
+      <main className="w-full max-w-6xl text-center">
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-2">
+          ¿Cuál fue la <span className="text-yellow-500">esencia oculta</span> en tu tarjeta?
+        </h1>
+        <p className="text-gray-600 mb-8 text-base max-w-2xl mx-auto">
+          Elige entre nuestros perfumes. Si aciertas el que perfumó tu tarjeta, ¡ganas un <strong>30% de descuento</strong> en tu próxima compra! Solo tienes <strong>una oportunidad</strong>.
+        </p>
 
+        {loading ? (
+          <ElixartLoader />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 px-4">
+            {perfumes.map((perfume) => (
+              <Card
+                key={perfume.id}
+                id={perfume.id}
+                name={perfume.title}
+                image={perfume.image}
+                url={perfume.url}
+                orderId={order_id as string}
+                description={perfume.description}
+              />
+            ))}
+          </div>
+        )}
+      </main>
+
+      {/* Si ya intentó */}
       {pedidoYaUsado && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
-            <h2 className="text-xl font-bold mb-2 text-red-600">Este pedido ya se ha intentado</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center px-4">
+          <div className="bg-white p-6 rounded-xl shadow-xl max-w-md w-full text-center">
+            <h2 className="text-xl font-bold text-red-600 mb-2">Este pedido ya fue usado</h2>
             {correcto && codigo ? (
               <>
-                <p className="text-gray-700 mb-4">¡Y acertaste! 🎉</p>
-                <p className="text-sm">Tu código de descuento es:</p>
-                <p className="text-xl font-mono bg-gray-100 rounded py-2 px-4 mt-2">{codigo}</p>
+                <p className="text-gray-700 mb-2">¡Y acertaste! 🥳</p>
+                <p className="text-sm text-gray-600">Tu código de descuento exclusivo:</p>
+                <p className="text-2xl font-mono bg-gray-100 px-6 py-2 rounded mt-2">{codigo}</p>
               </>
             ) : (
-              <p className="text-gray-700 mb-4">No puedes volver a intentarlo.</p>
+              <p className="text-gray-600">No puedes volver a intentarlo.</p>
             )}
             <button
               onClick={closePopup}
-              className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+              className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold"
             >
-              Volver
+              Volver al inicio
             </button>
           </div>
         </div>
       )}
+
+      {/* Footer */}
+      <footer className="text-sm text-gray-500 mt-8">
+        © 2024 Elixart Parfums. Todos los derechos reservados.
+      </footer>
     </div>
   );
 };

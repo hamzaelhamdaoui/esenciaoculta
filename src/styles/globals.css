@@ -29,3 +29,13 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes fade-in-out {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+.animate-fade-in-out {
+  animation: fade-in-out 1.5s infinite ease-in-out;
+}
